@@ -1,0 +1,24 @@
+# In-Car Voice Assistant Test Bench Dependencies
+# Python 3.10 - 3.12 recommended on Windows 64-bit with NVIDIA GPU (CUDA)
+
+# Web UI Framework
+gradio>=4.20.0
+
+# PyTorch with CUDA (Usually installed via: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 or cu124)
+torch>=2.1.0
+
+# Speech-to-Text (PhoWhisper)
+transformers>=4.38.0
+accelerate>=0.28.0
+soundfile>=0.12.1
+librosa>=0.10.1
+numpy<2.0.0
+
+# LLM Core (llama-cpp-python with CUDA support)
+# Note: For CUDA support on Windows, see README.md for pre-compiled wheel installation
+llama-cpp-python>=0.2.70
+
+# Utilities
+requests>=2.31.0
+tqdm>=4.66.0
+pydantic>=2.0.0

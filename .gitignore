@@ -1,0 +1,25 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Model weights (được tải tự động qua download_assets.py)
+models/*
+!models/.gitkeep
+
+# Công cụ Piper TTS binary (được tải tự động qua download_assets.py)
+piper/
+
+# File âm thanh tạm thời
+temp_audio/*
+!temp_audio/.gitkeep
+
+# Môi trường ảo Python & IDE
+venv/
+.venv/
+env/
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
