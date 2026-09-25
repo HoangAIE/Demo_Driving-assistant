@@ -151,13 +151,29 @@ class ModelManager:
 # 4. ENGINE WRAPPERS: STT / LLM / TTS
 # ==============================================================================
 def engine_stt(audio_path: Optional[str]) -> Tuple[str, float]:
-    """Chuyển giọng nói tài xế thành văn bản."""
+    """Chuyển giọng nói tài xế thành văn bản (không cần ffmpeg hệ thống)."""
     if not audio_path or not os.path.exists(audio_path):
         return "", 0.0
     t0 = time.perf_counter()
     try:
         pipe = ModelManager.get_stt()
-        result = pipe(audio_path, generate_kwargs={"language": "vi", "task": "transcribe"})
+
+        # Tự giải mã file âm thanh bằng soundfile / librosa để tránh lỗi thiếu ffmpeg
+        import soundfile as sf
+        import librosa
+
+        try:
+            audio_data, sample_rate = sf.read(audio_path, dtype="float32")
+            if audio_data.ndim > 1:
+                audio_data = audio_data.mean(axis=1)  # Chuyển stereo sang mono
+            if sample_rate != 16000:
+                audio_data = librosa.resample(audio_data, orig_sr=sample_rate, target_sr=16000)
+                sample_rate = 16000
+        except Exception:
+            audio_data, sample_rate = librosa.load(audio_path, sr=16000, mono=True)
+
+        inputs = {"raw": audio_data, "sampling_rate": sample_rate}
+        result = pipe(inputs, generate_kwargs={"language": "vi", "task": "transcribe"})
         text = result.get("text", "").strip()
     except Exception as e:
         print(f"[STT Error] {e}")
